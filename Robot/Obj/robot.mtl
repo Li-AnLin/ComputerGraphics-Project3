@@ -1,0 +1,137 @@
+newmtl initialShadingGroup
+illum 4
+Kd 0.50 0.50 0.50
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+#map_Kd Robot_arm1.png
+Ni 1.00
+newmtl lambert3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+#map_Kd Robot_arm2_d.png
+Ni 1.00
+newmtl lambert4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+#map_Kd Robot_helmet_d.png
+Ni 1.00
+newmtl lambert5SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+#map_Kd Robot_leg1_d.png
+Ni 1.00
+newmtl lambert6SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+#map_Kd Robot_leg2_d.png
+Ni 1.00
+newmtl robot:Default
+illum 4
+Kd 0.70 0.70 0.70
+Ka 0.70 0.70 0.70
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 7.10
+newmtl robot:_60_60
+illum 4
+Kd 0.20 0.20 0.20
+Ka 0.20 0.20 0.20
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.30 0.30 0.30
+Ns 0.00
+newmtl robot:_80_80
+illum 4
+Kd 0.30 0.30 0.30
+Ka 0.30 0.30 0.30
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.30 0.30 0.30
+Ns 0.00
+newmtl robot:_90_2
+illum 4
+Kd 0.80 0.40 0.10
+Ka 0.80 0.40 0.10
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.30 0.30 0.30
+Ns 0.00
+newmtl robot:set1
+illum 4
+Kd 0.20 0.20 0.20
+Ka 0.20 0.20 0.20
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.30 0.30 0.30
+Ns 0.00
+newmtl robot:set2
+illum 4
+Kd 0.60 0.00 0.10
+Ka 0.60 0.00 0.10
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.30 0.30 0.30
+Ns 9.60
+newmtl robot:set3
+illum 4
+Kd 0.10 0.10 0.10
+Ka 0.10 0.10 0.10
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.30 0.30 0.30
+Ns 0.00
+newmtl robot:set4
+illum 4
+Kd 0.90 0.90 0.90
+Ka 0.90 0.90 0.90
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.30 0.30 0.30
+Ns 7.40
+newmtl robot2:Metall
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.07 0.07 0.07
+Tf 0.47 0.47 0.47
+Ni 1.00
+Ks 0.38 0.38 0.38
+Ns 288.24
+newmtl robot2:Metall2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.07 0.07 0.07
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.06 0.06 0.06
+Ns 37.25
+newmtl robot2:glaz
+illum 4
+Kd 0.80 0.80 0.80
+Ka 0.53 0.53 0.53
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 96.08
+newmtl robot2:svet
+illum 4
+Kd 0.01 0.00 0.80
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 96.08
