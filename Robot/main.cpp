@@ -277,8 +277,6 @@ void Obj2Buffer(){
 	loadMTL("Obj/left_leet.mtl", Kds, Kas, Kss, Materials, texture);
 	loadMTL("Obj/right_leet.mtl", Kds, Kas, Kss, Materials, texture);
 
-	//loadMTL("Obj_old/gundam.mtl",Kds,Kas,Kss,Materials,texture);
-	//printf("%d\n", Materials.size());
 	for(int i = 0;i<Materials.size();i++){
 		string mtlname = Materials[i];
 		//  name            vec3
@@ -292,31 +290,6 @@ void Obj2Buffer(){
 	load2Buffer("Obj/right_hand.obj", 1);
 	load2Buffer("Obj/left_leet.obj", 15);
 	load2Buffer("Obj/right_leet.obj", 12);
-
-	//load2Buffer("Obj_old/body.obj",0);
-
-	//load2Buffer("Obj_old/ulefthand.obj",1);
-	//load2Buffer("Obj_old/dlefthand.obj",2);
-	//load2Buffer("Obj_old/lefthand.obj",3);
-	//load2Buffer("Obj_old/lshouder.obj",4);
-	//
-	//load2Buffer("Obj_old/head.obj",5);
-
-	//load2Buffer("Obj_old/urighthand.obj",6);
-	//load2Buffer("Obj_old/drighthand.obj",7);
-	//load2Buffer("Obj_old/righthand.obj",8);
-	//load2Buffer("Obj_old/rshouder.obj",9);
-
-	//load2Buffer("Obj_old/dbody.obj",11);
-	//load2Buffer("Obj_old/back2.obj",10);
-
-	//load2Buffer("Obj_old/uleftleg.obj",12);
-	//load2Buffer("Obj_old/dleftleg.obj",13);
-	//load2Buffer("Obj_old/leftfoot.obj",14);
-
-	//load2Buffer("Obj_old/urightleg.obj",15);	
-	//load2Buffer("Obj_old/drightleg.obj",16);	
-	//load2Buffer("Obj_old/rightfoot.obj",17);
 	
 	GLuint totalSize[3] = {0,0,0};
 	GLuint offset[3] = {0,0,0};
@@ -563,16 +536,16 @@ mat4 rotate(float angle,float x,float y,float z){
 }
 void Keyboard(unsigned char key, int x, int y){
 	switch(key){
-	case '1':
-		angle += 5;
-		if(angle>=360) angle = 0;
-		printf("beta:%f\n",angle);
-		break;
-	case '2':
-		angle -= 5;
-		if(angle<=0) angle = 360;
-		printf("beta:%f\n",angle);
-		break;
+	//case '1':
+	//	angle += 5;
+	//	if(angle>=360) angle = 0;
+	//	printf("beta:%f\n",angle);
+	//	break;
+	//case '2':
+	//	angle -= 5;
+	//	if(angle<=0) angle = 360;
+	//	printf("beta:%f\n",angle);
+	//	break;
 	case 'w':
 		eyedistance -= 0.2;
 		break;
@@ -600,6 +573,18 @@ void Keyboard(unsigned char key, int x, int y){
 	case 'q':
 		break;
 	case 'e':
+		break;
+	case '4':
+		eyePosition.x--;
+		break;
+	case '6':
+		eyePosition.x++;
+		break;
+	case '8':
+		eyePosition.y++;
+		break;
+	case '5':
+		eyePosition.y--;
 		break;
 	}
 	glutPostRedisplay();

@@ -15,8 +15,6 @@ using namespace std;
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 
-
-//#define PARTSNUM 6
 #define PARTSNUM 18
 //#define BODY 0
 //#define LEFTSHOUDER 1
@@ -69,6 +67,8 @@ float position = 0.0;
 float angle = 0.0;
 float eyeAngley = 0.0;
 float eyedistance = 20.0;
+vec3 eyePosition;
+
 float size = 1;
 GLfloat movex,movey;
 GLint MatricesIdx;
