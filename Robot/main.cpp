@@ -277,7 +277,7 @@ void Obj2Buffer(){
 	loadMTL("Obj/left_leet.mtl", Kds, Kas, Kss, Materials, texture);
 	loadMTL("Obj/right_leet.mtl", Kds, Kas, Kss, Materials, texture);
 
-	loadMTL("Obj_old/gundam.mtl",Kds,Kas,Kss,Materials,texture);
+	//loadMTL("Obj_old/gundam.mtl",Kds,Kas,Kss,Materials,texture);
 	//printf("%d\n", Materials.size());
 	for(int i = 0;i<Materials.size();i++){
 		string mtlname = Materials[i];
@@ -287,11 +287,11 @@ void Obj2Buffer(){
 
 	
 	load2Buffer("Obj/body.obj", 0);
-	load2Buffer("Obj/left_hand.obj", 1);
-	load2Buffer("Obj/head.obj", 2);
-	load2Buffer("Obj/right_hand.obj", 3);
-	load2Buffer("Obj/left_leet.obj", 4);
-	load2Buffer("Obj/right_leet.obj", 5);
+	load2Buffer("Obj/left_hand.obj", 6);
+	load2Buffer("Obj/head.obj", 5);
+	load2Buffer("Obj/right_hand.obj", 1);
+	load2Buffer("Obj/left_leet.obj", 15);
+	load2Buffer("Obj/right_leet.obj", 12);
 
 	//load2Buffer("Obj_old/body.obj",0);
 
@@ -302,21 +302,21 @@ void Obj2Buffer(){
 	//
 	//load2Buffer("Obj_old/head.obj",5);
 
-	load2Buffer("Obj_old/urighthand.obj",6);
-	load2Buffer("Obj_old/drighthand.obj",7);
-	load2Buffer("Obj_old/righthand.obj",8);
-	load2Buffer("Obj_old/rshouder.obj",9);
+	//load2Buffer("Obj_old/urighthand.obj",6);
+	//load2Buffer("Obj_old/drighthand.obj",7);
+	//load2Buffer("Obj_old/righthand.obj",8);
+	//load2Buffer("Obj_old/rshouder.obj",9);
 
-	load2Buffer("Obj_old/dbody.obj",11);
-	load2Buffer("Obj_old/back2.obj",10);
+	//load2Buffer("Obj_old/dbody.obj",11);
+	//load2Buffer("Obj_old/back2.obj",10);
 
-	load2Buffer("Obj_old/uleftleg.obj",12);
-	load2Buffer("Obj_old/dleftleg.obj",13);
-	load2Buffer("Obj_old/leftfoot.obj",14);
+	//load2Buffer("Obj_old/uleftleg.obj",12);
+	//load2Buffer("Obj_old/dleftleg.obj",13);
+	//load2Buffer("Obj_old/leftfoot.obj",14);
 
-	load2Buffer("Obj_old/urightleg.obj",15);	
-	load2Buffer("Obj_old/drightleg.obj",16);	
-	load2Buffer("Obj_old/rightfoot.obj",17);
+	//load2Buffer("Obj_old/urightleg.obj",15);	
+	//load2Buffer("Obj_old/drightleg.obj",16);	
+	//load2Buffer("Obj_old/rightfoot.obj",17);
 	
 	GLuint totalSize[3] = {0,0,0};
 	GLuint offset[3] = {0,0,0};
@@ -381,36 +381,36 @@ void updateModels(){
 	//Body
 	beta = angle;
 	Rotatation[0] = rotate(beta,0,1,0);
-	Translation[0] = translate(0,2.9+position,0);
+	Translation[0] = translate(0,1+position,0);
 	Models[0] = Translation[0]*Rotatation[0];
 	//左手=======================================================
 	//左上手臂
 	yaw = DOR(beta);r = 3.7;
 	alpha = angles[1];
-	gamma = 10;
+	gamma = 0;
 	Rotatation[1] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);//向前旋轉*向右旋轉
-	Translation[1] = translate(3.7,1,-0.5);
+	Translation[1] = translate(2,1.5, 0);
 
 	Models[1] = Models[0]*Translation[1]*Rotatation[1];
 	
-	//左肩膀
-	Rotatation[4] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);//向前旋轉*向右旋轉
-	Translation[4] =translate(3.7,1,-0.5);//位移到左上手臂處
-	Models[4] =Models[0]*Translation[1]*Rotatation[1];
+	////左肩膀
+	//Rotatation[4] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);//向前旋轉*向右旋轉
+	//Translation[4] =translate(3.7,1,-0.5);//位移到左上手臂處
+	//Models[4] =Models[0]*Translation[1]*Rotatation[1];
 	
-	//左下手臂
-	pitch = DOR(alpha);r = 3;
-	roll = DOR(gamma);
-	static int i=0;
-	i+=5;
-	alpha = angles[2]-20;
-	//上手臂+下手臂向前旋轉*向右旋轉
-	Rotatation[2] = rotate(alpha,1,0,0);
-	//延x軸位移以上手臂為半徑的圓周長:translate(0,r*cos,r*sin)
-	//延z軸位移以上手臂為半徑角度:translate(r*sin,-rcos,0)
-	Translation[2] = translate(0,-3,0);
+	////左下手臂
+	//pitch = DOR(alpha);r = 3;
+	//roll = DOR(gamma);
+	//static int i=0;
+	//i+=5;
+	//alpha = angles[2]-20;
+	////上手臂+下手臂向前旋轉*向右旋轉
+	//Rotatation[2] = rotate(alpha,1,0,0);
+	////延x軸位移以上手臂為半徑的圓周長:translate(0,r*cos,r*sin)
+	////延z軸位移以上手臂為半徑角度:translate(r*sin,-rcos,0)
+	//Translation[2] = translate(0,-3,0);
 
-	Models[2] = Models[1]*Translation[2]*Rotatation[2];
+	//Models[2] = Models[1]*Translation[2]*Rotatation[2];
 	
 
 	pitch = DOR(alpha);
@@ -419,86 +419,86 @@ void updateModels(){
 	//手掌角度與下手臂相同
 	//Rotatation[3] = Rotatation[2];
 	//延x軸位移以上手臂為半徑的圓周長:translate(0,r*cos,r*sin) ,角度為上手臂+下手臂
-	Translation[3] = translate(0,-4.8,0);
-	Models[3] = Models[2]*Translation[3]*Rotatation[3];
+	//Translation[3] = translate(0,-4.8,0);
+	//Models[3] = Models[2]*Translation[3]*Rotatation[3];
 	//============================================================
 	//頭==========================================================
-	Translation[5] = translate(0,3.9,-0.5);
+	Translation[5] = translate(0, 5.5 ,-0.5);
 	Models[5] = Models[0]*Translation[5]*Rotatation[5];
 	//============================================================
 	//右手=========================================================
-	gamma = -10;alpha = angles[6] = -angles[1];
+	gamma = 0;alpha = angles[6] = -angles[1];
 	Rotatation[6] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);
-	Translation[6] = translate(-3.9,1.7,-0.2);
+	Translation[6] = translate(-2,1.5, 0);
 	Models[6] = Models[0]*Translation[6]*Rotatation[6];
 
-	Rotatation[9] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);
-	Translation[9] = translate(-3.9,1.1,-0.2);
-	Models[9] = Models[0]*Translation[9]*Rotatation[9];
+	//Rotatation[9] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);
+	//Translation[9] = translate(-3.9,1.1,-0.2);
+	//Models[9] = Models[0]*Translation[9]*Rotatation[9];
 
-	angles[7] = angles[2];
-	pitch = DOR(alpha);r = -3;
-	roll = DOR(gamma);
-	alpha = angles[7]-20;
-	Rotatation[7] = rotate(alpha,1,0,0);
-	Translation[7] = translate(0,-3,0);
-	Models[7] = Models[6]*Translation[7]*Rotatation[7];
+	//angles[7] = angles[2];
+	//pitch = DOR(alpha);r = -3;
+	//roll = DOR(gamma);
+	//alpha = angles[7]-20;
+	//Rotatation[7] = rotate(alpha,1,0,0);
+	//Translation[7] = translate(0,-3,0);
+	//Models[7] = Models[6]*Translation[7]*Rotatation[7];
 
-	pitch = DOR(alpha);
+	//pitch = DOR(alpha);
 	//b = DOR(angles[7]);
-	roll = DOR(gamma);
-	Translation[8] =translate(0,-6,0);
-	Models[8] = Models[7]*Translation[8]*Rotatation[8];
+	//roll = DOR(gamma);
+	//Translation[8] =translate(0,-6,0);
+	//Models[8] = Models[7]*Translation[8]*Rotatation[8];
 	//=============================================================
 	//back&DBody===================================================
-	Translation[10] =translate(0,2,-4.5);
-	Models[10] = Models[0]*Translation[10]*Rotatation[10];
+	//Translation[10] =translate(0,2,-4.5);
+	//Models[10] = Models[0]*Translation[10]*Rotatation[10];
 
-	Translation[11] =translate(0,-5.3,0);
-	Models[11] = Models[0]*Translation[11]*Rotatation[11];
+	//Translation[11] =translate(0,-5.3,0);
+	//Models[11] = Models[0]*Translation[11]*Rotatation[11];
 	//=============================================================
 	//左腳
 	alpha = angles[12];gamma = 10;
 	Rotatation[12] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);
-	Translation[12] =translate(1.8,-4.5,0);
+	Translation[12] =translate(0.2,-1.5,0);
 	Models[12] = Translation[12]*Rotatation[12]*Models[12];
 
-	pitch = DOR(alpha);r = -7;
-	roll = DOR(gamma);
-	alpha = angles[13]+angles[12];
-	Translation[13] = translate(-r*sin(roll),r*cos(pitch),r*sin(pitch))*Translation[12];
-	Rotatation[13] = rotate(alpha,1,0,0);
-	Models[13] = Translation[13]*Rotatation[13]*Models[13];
+	//pitch = DOR(alpha);r = -7;
+	//roll = DOR(gamma);
+	//alpha = angles[13]+angles[12];
+	//Translation[13] = translate(-r*sin(roll),r*cos(pitch),r*sin(pitch))*Translation[12];
+	//Rotatation[13] = rotate(alpha,1,0,0);
+	//Models[13] = Translation[13]*Rotatation[13]*Models[13];
 
-	pitch = DOR(alpha); r = -5;
-	//b = DOR(angles[13]);
-	roll = DOR(gamma);
-	Translation[14] = translate(-(r+2)*sin(roll),r*cos(pitch),r*sin(pitch)-1)*Translation[13];
-	Rotatation[14] = rotate(alpha,1,0,0);
-	Models[14] = Translation[14]*Rotatation[14]*Models[14];
+	//pitch = DOR(alpha); r = -5;
+	////b = DOR(angles[13]);
+	//roll = DOR(gamma);
+	//Translation[14] = translate(-(r+2)*sin(roll),r*cos(pitch),r*sin(pitch)-1)*Translation[13];
+	//Rotatation[14] = rotate(alpha,1,0,0);
+	//Models[14] = Translation[14]*Rotatation[14]*Models[14];
 	//=============================================================
 	//右腳
 	alpha = angles[15] = -angles[12];
 	gamma = -10;
 	Rotatation[15] = rotate(alpha ,1,0,0)*rotate(gamma ,0,0,1);
-	Translation[15] =translate(-1.8,-4.5,0);
+	Translation[15] =translate(-0.2,-1.5,0);
 	Models[15] = Translation[15]*Rotatation[15]*Models[15];
 
-	angles[16] = angles[13];
-	pitch = DOR(alpha);r = -7;
-	roll = DOR(gamma);
-	alpha = angles[16]+angles[15];
-	Rotatation[16] = rotate(alpha,1,0,0);
-	Translation[16] = translate(-r*sin(roll),r*cos(pitch),r*sin(pitch))*Translation[15];
-	Models[16] = Translation[16]*Rotatation[16]*Models[16];
+	//angles[16] = angles[13];
+	//pitch = DOR(alpha);r = -7;
+	//roll = DOR(gamma);
+	//alpha = angles[16]+angles[15];
+	//Rotatation[16] = rotate(alpha,1,0,0);
+	//Translation[16] = translate(-r*sin(roll),r*cos(pitch),r*sin(pitch))*Translation[15];
+	//Models[16] = Translation[16]*Rotatation[16]*Models[16];
 
-	pitch = DOR(alpha); r = -5;
-	//b = DOR(angles[16]);
-	roll = DOR(gamma);
-	alpha = angles[15]+angles[16];
-	Translation[17] = translate(-(r+2)*sin(roll),r*cos(pitch),r*sin(pitch)-0.5)*Translation[16];
-	Rotatation[17] = rotate(alpha,1,0,0);
-	Models[17] = Translation[17]*Rotatation[17]*Models[17];
+	//pitch = DOR(alpha); r = -5;
+	////b = DOR(angles[16]);
+	//roll = DOR(gamma);
+	//alpha = angles[15]+angles[16];
+	//Translation[17] = translate(-(r+2)*sin(roll),r*cos(pitch),r*sin(pitch)-0.5)*Translation[16];
+	//Rotatation[17] = rotate(alpha,1,0,0);
+	//Models[17] = Translation[17]*Rotatation[17]*Models[17];
 	//=============================================================
 }
 
