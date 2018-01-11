@@ -1,0 +1,26 @@
+// amiga internal vendetta or coppermaster style plasma;
+// gigatron base source from here; 
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+#extension GL_OES_standard_derivatives : enable
+
+uniform float time;
+uniform vec2 resolution;
+#define r resolution
+#define t time
+void main( void ) {
+	vec2 p = gl_FragCoord.xy / r;
+	float k = 512.0 + sin((time / 3.0)) * 64.;
+	p = floor(p * k) / k;
+	vec3 a = vec3(0.5, 0.5, 0.7);
+	vec3 b = vec3(0.5, 0.5, 0.7);
+	vec3 c = vec3(t / 4., t * 0.8, t / 2.);
+	vec3 d = vec3(0.0, 0.2, 0.9);
+	vec3 col = b + a * sin(8.0  * (c + p.y + sin(p.x + p.x + t)));
+	     col*= b + a * sin(10.0 * (c + p.y + cos(p.y + p.y + t)));
+	     col*= b + a * sin(4.0 * (c + p.y + sin(p.x + p.y + t)));
+	 
+	gl_FragColor=vec4(col.rgb, 1.0);
+}

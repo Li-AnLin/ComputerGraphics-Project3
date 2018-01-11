@@ -16,11 +16,12 @@ using namespace std;
 using namespace glm;
 
 #define PARTSNUM 18
-//#define BODY 0
-//#define LEFTSHOUDER 1
-//#define ULEFTARM 2
-//#define DLEFTARM 3
-//#define LEFTHAND 4
+#define BODY 0
+#define LEFTHAND 1
+#define HEAD 5
+#define RIGHTHAND 6
+#define LEFTFOOT 12
+#define RIGHTFOOT 15
 
 void updateModels();
 
@@ -34,6 +35,7 @@ void Mouse(int button,int state,int x,int y);
 void menuEvents(int option);
 void ActionMenuEvents(int option);
 void ModeMenuEvents(int option);
+void FrameMenuEvents(int option);
 void ShaderMenuEvents(int option);
 
 void idle(int dummy);
@@ -59,8 +61,21 @@ GLuint UBO;
 GLuint VBOs[PARTSNUM];
 GLuint uVBOs[PARTSNUM];
 GLuint nVBOs[PARTSNUM];
+
+GLuint shadow_fbo;
+GLuint shadow_texture;
+GLuint frame_fbo;
+GLuint frame_texture;
+GLuint frame_Dtexture;
+
+GLuint backProgram;
+GLuint frameProgram;
 GLuint program;
+GLuint shadow_lightProgram;
+
 int pNo;
+int bID = -1;
+int fID = 0;
 
 float angles[PARTSNUM];
 float position = 0.0;
@@ -68,11 +83,11 @@ float angle = 0.0;
 float eyeAngley = 0.0;
 float eyedistance = 20.0;
 vec3 eyePosition;
+vec3 lightPposition;
 
 float size = 1;
 GLfloat movex,movey;
-GLint MatricesIdx;
-GLuint ModelID;
+float w, h, mx, my;
 
 int vertices_size[PARTSNUM];
 int uvs_size[PARTSNUM];
@@ -89,10 +104,15 @@ mat4 View;
 mat4 Model;
 mat4 Models[PARTSNUM];
 
-//#define leftHand 0
-//#define rightHand 1
-//#define leftFoot 2
-//#define rightFoot 3
+GLuint timeUniform;
+GLuint resolutionUniform;
+GLuint mouseUniform;
+
+GLuint u_frameMode;
+GLuint u_frameTime;
+GLuint u_frameResolution;
+GLuint u_frameMouse;
+
 #define WALK 1
 #define IDLE 0
 int mode;

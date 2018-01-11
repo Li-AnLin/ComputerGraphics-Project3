@@ -1,0 +1,132 @@
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+#extension GL_OES_standard_derivatives : enable
+
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+
+void main( void ) {
+
+	vec2 position = ( gl_FragCoord.xy / resolution.xy );
+
+	vec3 COLOR = vec3(0.0,0.0,0.0);
+	
+	float color = 0.00001;
+	float color2 = 0.0001;
+	
+	float Length = 0.3;
+        float pointX = 0.4;	
+        float pointY = 0.5;
+	
+	if(position.x < 0.3&&
+	   position.x > 0.2)
+	   {
+	        COLOR.x = 1.0;	
+	   }
+	if(position.x < 0.4&&
+	   position.x > 0.3)
+	   {
+	        COLOR.y = 1.0;	
+	   }
+	if(position.x < 0.5&&
+	   position.x > 0.4)
+	   {
+	        COLOR.z = 1.0;	
+	   }
+	if(position.x < 0.6&&
+	   position.x > 0.5)
+	   {
+	        COLOR.x = 1.0;	
+	   }
+	if(position.x < 0.7&&
+	   position.x > 0.6)
+	   {
+	        COLOR.y = 2.0;	
+	   }
+	if(position.x < 0.8&&
+	   position.x > 0.7)
+	   {
+	        COLOR.z = 2.0;	
+	   }
+	if(position.x < 0.8&&
+	   position.x > 0.7)
+	   {
+	        COLOR.y = 2.0;	
+	   }
+	if(position.x < 0.9&&
+	   position.x > 0.8)
+	   {
+	        COLOR.y = 2.0;	
+	   }
+	if(position.x < 1.0&&
+	   position.x > 0.9)
+	   {
+	        COLOR.x = 3.0;	
+	   }
+	if(position.x < 0.1&&
+	   position.x > 0.0)
+	   {
+	        COLOR.z = 2.0;	
+	   }
+	if(position.x < 0.2&&
+	   position.x > 0.1)
+	   {
+	        COLOR.y = 2.0;	
+	   }
+	if(position.x < 0.3+sin(time*2.0)&&
+	   position.x > 0.2+sin(time*2.0))
+	   {
+	        COLOR.x = 1.0;	
+	   }
+	if(position.x < 0.4+sin(time*1.0)&&
+	   position.x > 0.3+sin(time*1.0))
+	   {
+	        COLOR.y = 1.0;	
+	   }
+	if(position.x < 0.5+sin(time*1.0)&&
+	   position.x > 0.4+sin(time*1.0))
+	   {
+	        COLOR.z = 1.0;	
+	   }
+	if(position.x < 0.6+sin(time*1.0)&&
+	   position.x > 0.5+sin(time*1.0))
+	   {
+	        COLOR.x = 1.0;	
+	   }
+	if(position.x < 0.7+sin(time*1.0)&&
+	   position.x > 0.6+sin(time*1.0))
+	   {
+	        COLOR.y = 2.0;	
+	   }
+	if(position.x < 0.8+sin(time*1.0)&&
+	   position.x > 0.7+sin(time*1.0))
+	   {
+	        COLOR.z = 2.0;	
+	   }
+	if(position.x < 0.8+sin(time*1.0)&&
+	   position.x > 0.7+sin(time*1.0))
+	   {
+	        COLOR.y = 2.0;	
+	   }
+	
+								
+	/*if(position.x < pointX + Length &&
+	   position.x > pointX - Length 
+	   //position.y < pointY + Length &&
+	   //position.y > pointY - Length)
+	  )
+	  
+	{
+		color= 1.0;
+	}*/
+	/*if(position.x == color)
+	//{
+	//	color2 = 3.2;
+	}*/
+	
+	gl_FragColor = vec4( COLOR, 1.0 );
+
+}

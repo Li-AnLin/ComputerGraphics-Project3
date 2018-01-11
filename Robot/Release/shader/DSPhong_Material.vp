@@ -1,0 +1,41 @@
+// ADS Point lighting Shader
+// Vertex Shader
+// Richard S. Wright Jr.
+// OpenGL SuperBible
+#version 430
+
+layout(location = 0) in vec3 vPosition;
+layout(location = 1) in vec2 vertexUV;
+layout(location = 2) in vec3 vertexNormal;
+
+uniform mat4 View;
+uniform mat4 Projection;
+uniform mat4 shadow_matrix;
+uniform vec3 vLightPosition;
+uniform mat4 Model;
+
+out vec3 vVaryingNormal;
+out vec3 vVaryingLightDir;
+out vec2 UV;
+out vec3 V;
+out vec4 shadow_coord;
+
+const vec4 vertexs[4]=vec4[](
+    vec4(-1,-1,0.5,1),
+    vec4(1,-1,0.5,1),
+    vec4(1,1,0.5,1),
+    vec4(-1,1,0.5,1)
+    );
+void main(void) {
+
+	mat4 MV = View*Model;
+    vVaryingNormal = mat3(MV) * vertexNormal;
+    vec4 vPosition4 = MV * vec4(vPosition,1);
+    vec3 vPosition3 = vPosition4.xyz / vPosition4.w;
+    vVaryingLightDir = normalize(vLightPosition - vPosition3);
+	UV = vertexUV;
+    mat4 MVP = Projection*View*Model;
+    V = -vPosition3;
+    shadow_coord = shadow_matrix * vec4(vPosition,1);
+    gl_Position = MVP * vec4(vPosition,1);
+}
