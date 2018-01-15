@@ -11,9 +11,7 @@ GLuint u_view;
 GLuint u_projection;
 GLuint u_shadow_matrix;
 GLuint u_lightPosition;
-GLuint u_displayMode;
-
-GLint u_shadow_mvp;
+GLuint displayMode;
 
 int actionTime = 0;
 int frameTime = 0;
@@ -25,14 +23,11 @@ void motion(int x, int y) {
 
 int main(int argc, char** argv){
 	glutInit(&argc, argv);
-	//glutInitContextVersion(4,3);//以OpenGL version4.3版本為基準
-	//glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);//是否向下相容,GLUT_FORWARD_COMPATIBLE不支援(?
-	//glutInitContextProfile(GLUT_CORE_PROFILE);
 
 	//multisample for golygons smooth
 	glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH|GLUT_MULTISAMPLE);
 	glutInitWindowSize(800, 600);
-	glutCreateWindow("OpenGL 4.3 - Robot");
+	glutCreateWindow("Lin - Robot");
 
 	glewExperimental = GL_TRUE; //置於glewInit()之前
 	if (glewInit()) {
@@ -40,10 +35,6 @@ int main(int argc, char** argv){
 		exit(EXIT_FAILURE);
 	}
 
-	//glEnable(GL_DEPTH_TEST);
-	////glDepthFunc(GL_LESS);
-	//glCullFace(GL_BACK);
-	//glEnable(GL_CULL_FACE);
 	init();
 	glutDisplayFunc(display);
 	glutReshapeFunc(ChangeSize);
@@ -60,12 +51,26 @@ int main(int argc, char** argv){
 	//加入右鍵物件
 	glutAddMenuEntry("Line",0);
 	glutAddMenuEntry("Fill",1);
+	glutAddMenuEntry("Solarization", 2);
+	glutAddMenuEntry("Negative", 3);
+	glutAddMenuEntry("Black & White", 4);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	//與右鍵關聯
 
 	FrameMenu = glutCreateMenu(FrameMenuEvents);
 	glutAddMenuEntry("None", 0);
 	glutAddMenuEntry("Offset", 1);
 	glutAddMenuEntry("Mosaics", 2);
+	glutAddMenuEntry("PartMosaics", 3);
+	glutAddMenuEntry("ColorDistortion", 4);
+	glutAddMenuEntry("SpatialDistortion", 5);
+	glutAddMenuEntry("Displacement", 6);
+	glutAddMenuEntry("Patterns", 7);
+	glutAddMenuEntry("fog", 8);
+	glutAddMenuEntry("DoG", 9);
+	glutAddMenuEntry("Swirling", 10);
+	glutAddMenuEntry("CrossStitching", 11);
+	glutAddMenuEntry("EdgeDetectors", 12);
+	glutAddMenuEntry("RadialBlurFilter", 13);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	//與右鍵關聯
 
 	glutCreateMenu(menuEvents);//建立右鍵菜單
@@ -115,6 +120,7 @@ void idle(int dummy){
 	}
 	glutPostRedisplay();
 	actionTime += 1;
+	frameTime += 1;
 	glutTimerFunc (30, idle, out); //150
 }
 void resetObj(int f){
@@ -206,34 +212,10 @@ void init(){
 	u_projection = glGetUniformLocation(program, "Projection");
 	u_shadow_matrix = glGetUniformLocation(program, "shadow_matrix");
 	u_lightPosition = glGetUniformLocation(program, "vLightPosition");
-	u_displayMode = glGetUniformLocation(program, "displayMode");
-	//MatricesIdx = glGetUniformBlockIndex(program, "MatVP");
-	//ModelID = glGetUniformLocation(program, "Model");
+	displayMode = glGetUniformLocation(program, "displayMode");
     M_KaID = glGetUniformLocation(program,"Material.Ka");
 	M_KdID = glGetUniformLocation(program,"Material.Kd");
 	M_KsID = glGetUniformLocation(program,"Material.Ks");
-	////or
-	//M_KdID = M_KaID+1;
-	//M_KsID = M_KaID+2;
-
-	//shadow
-	//shaders[0].filename = "../shader/shadowmapping-light.vs.glsl";
-	//shaders[1].filename = "../shader/shadowmapping-light.fs.glsl";
-	//shadow_lightProgram = LoadShaders(shaders);
-	//glUseProgram(shadow_lightProgram);
-	//u_shadow_mvp = glGetUniformLocation(shadow_lightProgram, "mvp");
-	//glGenFramebuffers(1, &shadow_fbo);
-	//glBindFramebuffer(GL_FRAMEBUFFER, shadow_fbo);
-	//glGenTextures(1, &shadow_texture);
-	//glBindTexture(GL_TEXTURE_2D, shadow_texture);
-	//glTexStorage2D(GL_TEXTURE_2D, 11, GL_DEPTH_COMPONENT32F, 4096, 4096);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-	//glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadow_texture, 0);
-	//glBindTexture(GL_TEXTURE_2D, 0);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//background
 	shaders[0].filename = "./shader/back.vs";
@@ -286,151 +268,9 @@ void init(){
 	Obj2Buffer();
 
 	lightPposition = vec3(40.0f, 40.0f, 40.0f);
-
-	//UBO
-	//glGenBuffers(1,&UBO);
-	//glBindBuffer(GL_UNIFORM_BUFFER,UBO);
-	//glBufferData(GL_UNIFORM_BUFFER,sizeof(mat4)*2,NULL,GL_DYNAMIC_DRAW);
-	////get uniform struct size
-	//int UBOsize = 0;
-	//glGetActiveUniformBlockiv(program, MatricesIdx, GL_UNIFORM_BLOCK_DATA_SIZE, &UBOsize);  
-	////bind UBO to its idx
-	//glBindBufferRange(GL_UNIFORM_BUFFER,0,UBO,0,UBOsize);
-	//glUniformBlockBinding(program, MatricesIdx,0);
 }
 
 #define DOR(angle) (angle*3.1415/180);
-/*
-void display() {
-	static const GLfloat ones[] = { 1.0f };
-	static const GLfloat zero[] = { 0.0f };
-	static const GLfloat gray[] = { 0.1f, 0.1f, 0.1f, 0.0f };
-	static const mat4 scale_bias_matrix = mat4(
-		vec4(0.5f, 0.0f, 0.0f, 0.0f),
-		vec4(0.0f, 0.5f, 0.0f, 0.0f),
-		vec4(0.0f, 0.0f, 0.5f, 0.0f),
-		vec4(0.5f, 0.5f, 0.5f, 1.0f)
-	);
-	static const GLenum buffs[] = { GL_COLOR_ATTACHMENT0 };
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	updateModels();
-	//--------------
-	//glBindFramebuffer(GL_FRAMEBUFFER, frame_fbo);
-	//glViewport(0, 0, w, h);
-	//glDrawBuffers(1, buffs);
-	//glClearBufferfv(GL_COLOR, 0, zero);
-	//glClearBufferfv(GL_DEPTH, 0, ones);
-	//--------------
-	glUseProgram(backProgram);
-	glUniform1f(timeUniform, actionTime / 30.);
-	glUniform2f(resolutionUniform, w, h);
-	glUniform2f(mouseUniform, mx / w, 1 - my / h);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	//------------------
-	vec3 rot_light_position = vec3(lightPposition.x*sin((eyeAngley + 60)*3.1415 / 180), lightPposition.y, lightPposition.z*cos((eyeAngley + 60)*3.1415 / 180));
-	mat4 shadow_light_proj_matrix = frustum(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 200.0f);
-	mat4 shadow_light_view_matrix = lookAt(rot_light_position, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
-	mat4 light_vp_matrix = shadow_light_proj_matrix * shadow_light_view_matrix;
-	mat4 shadow_sbpv_matrix = scale_bias_matrix * shadow_light_proj_matrix * shadow_light_view_matrix;
-	if (mode & 1)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	/////////////////////////////////////////////////////////
-	glBindFramebuffer(GL_FRAMEBUFFER, shadow_fbo);
-	glViewport(0, 0, 4096, 4096);
-	glEnable(GL_POLYGON_OFFSET_FILL);
-	glPolygonOffset(4.0f, 4.0f);
-	glUseProgram(shadow_lightProgram);
-	glBindVertexArray(VAO);
-	glDrawBuffers(1, buffs);
-	glClearBufferfv(GL_COLOR, 0, zero);
-	glClearBufferfv(GL_DEPTH, 0, ones);
-	for (int i = 0, ofs = 0; i < PARTSNUM; i++) {
-		if ((i == BACK && (disp & 1) == 0) || ((i == WINGL || i == WINGR) && (disp & 2) == 0) || (i == FLOOR && (disp & 4) == 0) || (disp & 8) == 0) {
-			ofs += vertices_size[i] * sizeof(vec3);
-			continue;
-		}
-		glUniformMatrix4fv(u_shadow_mvp, 1, GL_FALSE, &(light_vp_matrix * Models[i])[0][0]);
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)ofs);
-		ofs += vertices_size[i] * sizeof(vec3);
-		int vertexIDoffset = 0;
-		for (int j = 0; j <mtls[i].size(); j++) {
-			glDrawArrays(GL_TRIANGLES, vertexIDoffset, faces[i][j + 1] * 3);
-			vertexIDoffset += faces[i][j + 1] * 3;
-		}
-	}
-	glDisable(GL_POLYGON_OFFSET_FILL);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, frame_fbo);
-	///////////////////////////////////////////////////
-	glViewport(0, 0, w, h);
-	glUseProgram(program);
-	glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, shadow_texture);
-	glDrawBuffer(GL_BACK);
-	glClearBufferfv(GL_DEPTH, 0, ones);
-	float eyey = DOR(eyeAngley);
-	View = lookAt(vec3(eyedistance*sin(eyey), 2, eyedistance*cos(eyey)) + eyePosition, eyePosition, vec3(0, 1, 0));
-	glUniformMatrix4fv(u_view, 1, GL_FALSE, &View[0][0]);
-	glUniformMatrix4fv(u_projection, 1, GL_FALSE, &Projection[0][0]);
-	glUniform3fv(u_lightPosition, 1, &lightPposition[0]);
-	glUniform1i(u_displayMode, mode);
-	GLuint offset[3] = { 0,0,0 };
-	for (int i = 0; i<PARTSNUM; i++) {
-		//if ((i == BACK && (disp & 1) == 0) || ((i == WINGL || i == WINGR) && (disp & 2) == 0) || (i == FLOOR && (disp & 4) == 0) || (disp & 8) == 0) {
-		//	offset[0] += vertices_size[i] * sizeof(vec3);
-		//	offset[1] += uvs_size[i] * sizeof(vec2);
-		//	offset[2] += normals_size[i] * sizeof(vec3);
-		//	continue;
-		//}
-		glUniformMatrix4fv(ModelID, 1, GL_FALSE, &Models[i][0][0]);
-		glUniformMatrix4fv(u_shadow_matrix, 1, GL_FALSE, &(shadow_sbpv_matrix * Models[i])[0][0]);
-		glBindVertexArray(VAO);
-		//position
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)offset[0]);
-		offset[0] += vertices_size[i] * sizeof(vec3);
-		//uv
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, uVBO);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)offset[1]);
-		offset[1] += uvs_size[i] * sizeof(vec2);
-		//normal
-		glEnableVertexAttribArray(2);
-		glBindBuffer(GL_ARRAY_BUFFER, nVBO);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)offset[2]);
-		offset[2] += normals_size[i] * sizeof(vec3);
-		//draw
-		int vertexIDoffset = 0;
-		string mtlname;
-		vec3 Ks = vec3(1, 1, 1);
-		for (int j = 0; j <mtls[i].size(); j++) {
-			mtlname = mtls[i][j];
-			glUniform3fv(M_KdID, 1, &KDs[mtlname][0]);
-			glUniform3fv(M_KsID, 1, &Ks[0]);
-			glDrawArrays(GL_TRIANGLES, vertexIDoffset, faces[i][j + 1] * 3);
-			vertexIDoffset += faces[i][j + 1] * 3;
-		}
-	}
-	if (mode & 1)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//--------------
-	//glViewport(0, 0, w, h);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//glUseProgram(frameProgram);
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, frame_texture);
-	//glUniform1i(u_frameMode, fMode);
-	//glUniform1f(u_frameTime, frameTime / 30.);
-	//glUniform2f(u_frameResolution, w, h);
-	//glUniform2f(u_frameMouse, mx / w, 1 - my / h);
-	//glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	glutSwapBuffers();
-}
-*/
 
 void display(){
 	static const GLfloat ones[] = { 1.0f };
@@ -445,6 +285,7 @@ void display(){
 	static const GLenum buffs[] = { GL_COLOR_ATTACHMENT0 };
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	updateModels();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	//--------------
 	glBindFramebuffer(GL_FRAMEBUFFER, frame_fbo);
 	glViewport(0, 0, w, h);
@@ -471,13 +312,18 @@ void display(){
 	glUniformMatrix4fv(u_view, 1, GL_FALSE, &View[0][0]);
 	glUniformMatrix4fv(u_projection, 1, GL_FALSE, &Projection[0][0]);
 	glUniform3fv(u_lightPosition, 1, &lightPposition[0]);
-	glUniform1i(u_displayMode, mode);
+	glUniform1i(displayMode, mID);
 	//update data to UBO for MVP
 	glBindBuffer(GL_UNIFORM_BUFFER,UBO);
 	glBufferSubData(GL_UNIFORM_BUFFER,0,sizeof(mat4),&View);
 	glBufferSubData(GL_UNIFORM_BUFFER,sizeof(mat4),sizeof(mat4),&Projection);
 	glBindBuffer(GL_UNIFORM_BUFFER,0);
-
+	//-------------
+	if (mID == 0)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else if (mID == 1)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//-------------
 	GLuint offset[3] = {0,0,0};//offset for vertices , uvs , normals
 	for(int i = 0;i < PARTSNUM ;i++){
 		glUniformMatrix4fv(ModelID,1,GL_FALSE,&Models[i][0][0]);
@@ -535,6 +381,8 @@ void display(){
 	}//end for loop for updating and drawing model
 
 	//--------------
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//--------------
 	glViewport(0, 0, w, h);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(frameProgram);
@@ -543,12 +391,9 @@ void display(){
 	glUniform1i(u_frameMode, fID);
 	glUniform1f(u_frameTime, frameTime / 30.);
 	glUniform2f(u_frameResolution, w, h);
-	glUniform2f(u_frameMouse, mx / w, 1 - my / h);
+	glUniform2f(u_frameMouse, mx / w + 0.5, my / h + 0.7);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	glutSwapBuffers();
-
-	//glFlush();//強制執行上次的OpenGL commands
-	//glutSwapBuffers();//調換前台和後台buffer ,當後臺buffer畫完和前台buffer交換使我們看見它
+	glutSwapBuffers();//調換前台和後台buffer ,當後臺buffer畫完和前台buffer交換使我們看見它
 }
 
 void Obj2Buffer(){
@@ -808,7 +653,7 @@ void Keyboard(unsigned char key, int x, int y){
 		timeUniform = glGetUniformLocation(backProgram, "time");
 		resolutionUniform = glGetUniformLocation(backProgram, "resolution");
 		mouseUniform = glGetUniformLocation(backProgram, "mouse");
-		printf("BID : %d,%s\n", bID, strT);
+		printf("BID : %d\n", bID);
 		break;
 	case 'v':
 		bID++;
@@ -820,7 +665,15 @@ void Keyboard(unsigned char key, int x, int y){
 		timeUniform = glGetUniformLocation(backProgram, "time");
 		resolutionUniform = glGetUniformLocation(backProgram, "resolution");
 		mouseUniform = glGetUniformLocation(backProgram, "mouse");
-		printf("BID : %d,%s\n", bID, strT);
+		printf("BID : %d\n", bID);
+		break;
+	case 'b':
+		mID--;
+		printf("MID : %d\n", mID);
+		break;
+	case 'n':
+		mID++;
+		printf("MID : %d\n", mID);
 		break;
 	}
 	glutPostRedisplay();
@@ -836,19 +689,14 @@ void ActionMenuEvents(int option){
 		break;
 	}
 }
-void ModeMenuEvents(int option){
-	switch(option){
-	case 0:
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		break;
-	case 1:
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		break;
-	}
+void ModeMenuEvents(int option){	
+	mID = option;
+	printf("MID : %d\n", mID);
 }
 
 void FrameMenuEvents(int option) {
 	fID = option;
+	printf("FID : %d\n", fID);
 }
 
 void ShaderMenuEvents(int option){

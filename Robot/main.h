@@ -76,6 +76,7 @@ GLuint shadow_lightProgram;
 int pNo;
 int bID = -1;
 int fID = 0;
+int mID = 1;
 
 float angles[PARTSNUM];
 float position = 0.0;
