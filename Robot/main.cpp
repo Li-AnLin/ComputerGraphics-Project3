@@ -65,12 +65,42 @@ int main(int argc, char** argv){
 	glutAddMenuEntry("SpatialDistortion", 5);
 	glutAddMenuEntry("Displacement", 6);
 	glutAddMenuEntry("Patterns", 7);
-	glutAddMenuEntry("fog", 8);
-	glutAddMenuEntry("DoG", 9);
+	glutAddMenuEntry("Fog", 8);
+	glutAddMenuEntry("ShadowClone", 9);
 	glutAddMenuEntry("Swirling", 10);
 	glutAddMenuEntry("CrossStitching", 11);
 	glutAddMenuEntry("EdgeDetectors", 12);
 	glutAddMenuEntry("RadialBlurFilter", 13);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);	//與右鍵關聯
+
+	ShaderMenu = glutCreateMenu(ShaderMenuEvents);
+	glutAddMenuEntry("1", 0);
+	glutAddMenuEntry("2", 1);
+	glutAddMenuEntry("3", 2);
+	glutAddMenuEntry("4", 3);
+	glutAddMenuEntry("5", 4);
+	glutAddMenuEntry("6", 5);
+	glutAddMenuEntry("7", 6);
+	glutAddMenuEntry("8", 7);
+	glutAddMenuEntry("9", 8);
+	glutAddMenuEntry("10", 9);
+	glutAddMenuEntry("11", 10);
+	glutAddMenuEntry("12", 11);
+	glutAddMenuEntry("13", 12);
+	glutAddMenuEntry("14", 13);
+	glutAddMenuEntry("15", 14);
+	glutAddMenuEntry("16", 15);
+	glutAddMenuEntry("17", 16);
+	glutAddMenuEntry("18", 17);
+	glutAddMenuEntry("19", 18);
+	glutAddMenuEntry("20", 19);
+	glutAddMenuEntry("21", 20);
+	glutAddMenuEntry("22", 21);
+	glutAddMenuEntry("23", 22);
+	glutAddMenuEntry("24", 23);
+	glutAddMenuEntry("25", 24);
+	glutAddMenuEntry("26", 25);
+	glutAddMenuEntry("27", 26);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	//與右鍵關聯
 
 	glutCreateMenu(menuEvents);//建立右鍵菜單
@@ -78,6 +108,7 @@ int main(int argc, char** argv){
 	glutAddSubMenu("action",ActionMenu);
 	glutAddSubMenu("mode",ModeMenu);
 	glutAddSubMenu("frame", FrameMenu);
+	glutAddSubMenu("background", ShaderMenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	//與右鍵關聯
 
 	glutMouseFunc(Mouse);
@@ -227,8 +258,8 @@ void init(){
 	mouseUniform = glGetUniformLocation(backProgram, "mouse");
 
 	//frame
-	shaders[0].filename = "./shader/frame.vs";
-	shaders[1].filename = "./shader/frame.fs";
+	shaders[0].filename = "./shader/front.vs";
+	shaders[1].filename = "./shader/front.fs";
 	frameProgram = LoadShaders(shaders);
 	glUseProgram(frameProgram);
 	u_frameMode = glGetUniformLocation(frameProgram, "mode");
@@ -517,14 +548,14 @@ void updateModels(){
 	//左腳
 	alpha = angles[LEFTFOOT];gamma = 10;
 	Rotatation[LEFTFOOT] = rotate(alpha,1,0,0)*rotate(gamma,0,0,1);
-	Translation[LEFTFOOT] =translate(0.2,-1.5,0);
-	Models[LEFTFOOT] = Translation[LEFTFOOT]*Rotatation[LEFTFOOT]*Models[LEFTFOOT]* rotate(180,0,1,0);
+	Translation[LEFTFOOT] =translate(0.2,-1.5 + position,0);
+	Models[LEFTFOOT] = Translation[LEFTFOOT] * Rotatation[LEFTFOOT] * Models[LEFTFOOT] * rotate(180, 0, 1, 0);
 
 	alpha = angles[RIGHTFOOT] = -angles[LEFTFOOT];
 	gamma = -10;
 	Rotatation[RIGHTFOOT] = rotate(alpha ,1,0,0)*rotate(gamma ,0,0,1);
-	Translation[RIGHTFOOT] =translate(-0.2,-1.5,0);
-	Models[RIGHTFOOT] = Translation[RIGHTFOOT]*Rotatation[RIGHTFOOT]*Models[RIGHTFOOT] * rotate(180, 0, 1, 0);
+	Translation[RIGHTFOOT] =translate(-0.2,-1.5 + position,0);
+	Models[RIGHTFOOT] = Translation[RIGHTFOOT] * Rotatation[RIGHTFOOT] * Models[RIGHTFOOT] * rotate(180, 0, 1, 0);
 
 }
 
@@ -700,5 +731,20 @@ void FrameMenuEvents(int option) {
 }
 
 void ShaderMenuEvents(int option){
-	pNo = option;
+	bID = option;
+	char strT[30];
+	ShaderInfo shaders[] = {
+		{ GL_VERTEX_SHADER, "./shader/back.vs" },//vertex shader
+		{ GL_FRAGMENT_SHADER, "" },//fragment shader
+		{ GL_NONE, NULL }
+	};
+	glDeleteProgram(backProgram);
+	sprintf(strT, "./shader/background/glsl%03d.txt", bID);
+	shaders[1].filename = strT;
+	backProgram = LoadShaders(shaders);
+	glUseProgram(backProgram);
+	timeUniform = glGetUniformLocation(backProgram, "time");
+	resolutionUniform = glGetUniformLocation(backProgram, "resolution");
+	mouseUniform = glGetUniformLocation(backProgram, "mouse");
+	printf("BID : %d\n", bID);
 }
